@@ -17,31 +17,53 @@ export class SignInWithGoogleComponent implements OnInit {
   constructor(private authService: SocialAuthService, private httpClient: HttpClient) {}
 
   getAccessToken(): void {
-    this.authService.getAccessToken(GoogleLoginProvider.PROVIDER_ID).then(accessToken => this.accessToken = accessToken);
+    this.authService
+      .getAccessToken(GoogleLoginProvider.PROVIDER_ID)
+      .then(accessToken => {
+        this.accessToken = accessToken;
+        localStorage.setItem('access_token', accessToken); // Store access token in localStorage
+      });
   }
 
   getGoogleCalendarData(): void {
-    if (!this.accessToken) return;
+    const accessToken = localStorage.getItem('access_token'); // Retrieve access token from localStorage
+    if (!accessToken) return;
 
     this.httpClient
       .get('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-        headers: { Authorization: `Bearer ${this.accessToken}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
-      .subscribe((events) => {
-        alert('Look at your console');
+      .subscribe(events => {
         console.log('events', events);
       });
   }
 
   refreshToken(): void {
     this.authService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
+    localStorage.setItem('access_token', this.accessToken);
   }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    const storedAccessToken = localStorage.getItem('access_token'); // Retrieve access token from localStorage
+    if (storedAccessToken) {
+      this.accessToken = storedAccessToken;
+    }
+
+    this.authService.authState.subscribe(user => {
       this.user = user;
-      this.loggedIn = (user != null);
-      console.log('User email:', user.email);
+      this.loggedIn = user !== null;
+
+      if (user) {
+        localStorage.setItem('user_info', JSON.stringify(user)); // Store user info in localStorage
+      } else {
+        localStorage.removeItem('user_info'); // Clear user info from localStorage if user is not logged in
+      }
     });
+
+    const storedUserInfo = localStorage.getItem('user_info'); // Retrieve user info from localStorage
+    if (storedUserInfo) {
+      this.user = JSON.parse(storedUserInfo);
+      this.loggedIn = true;
+    }
   }
 }
