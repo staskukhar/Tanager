@@ -9,11 +9,15 @@ import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-s
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { SignInWithGoogleComponent } from './components/sign-in-with-google/sign-in-with-google.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignInWithGoogleComponent
+    SignInWithGoogleComponent,
+    ProfileComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
