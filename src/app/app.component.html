@@ -1,1 +1,5 @@
-<app-sign-in-with-google></app-sign-in-with-google>
+<section id="main-container">
+    <app-nav-bar id="main-nav" *ngIf="userLoggined"></app-nav-bar>
+    <router-outlet id="main-window">
+    </router-outlet>
+</section>
