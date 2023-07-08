@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
 import { SocialAuthService, GoogleLoginProvider, SocialUser } from "@abacritt/angularx-social-login";
+import { Router } from '@angular/router';
+import { UserStateService } from 'src/app/user-state.service';
 
 @Component({
   selector: 'app-sign-in-with-google',
@@ -14,7 +15,10 @@ export class SignInWithGoogleComponent implements OnInit {
   user: SocialUser = new SocialUser();
   loggedIn: boolean = false;
 
-  constructor(private authService: SocialAuthService, private httpClient: HttpClient) {}
+  constructor(private authService: SocialAuthService, 
+    private httpClient: HttpClient,
+    private router: Router,
+    private userState: UserStateService) {}
 
   getAccessToken(): void {
     this.authService
@@ -54,7 +58,9 @@ export class SignInWithGoogleComponent implements OnInit {
       this.loggedIn = user !== null;
 
       if (user) {
-        localStorage.setItem('user_info', JSON.stringify(user)); // Store user info in localStorage
+        localStorage.setItem('user_info', JSON.stringify(user)) // Store user info in localStorage
+        this.router.navigate(['/profile']) // if logging is succesfull then we redirecr to profile
+        this.userState.setUserLoggedIn(true); // notify state service that user is loggined
       } else {
         localStorage.removeItem('user_info'); // Clear user info from localStorage if user is not logged in
       }
