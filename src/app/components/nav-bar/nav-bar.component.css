@@ -1,0 +1,12 @@
+#main-nav{
+    display: flex;
+    margin: 0px;
+}
+
+#main-nav>ul{
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
