@@ -1,0 +1,15 @@
+<nav id="main-nav">
+    <ul>
+        <li *ngIf="(userLoggined$ | async)">
+            <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
+                <img height="50px" width="50px" src="././assets/images/profile.png" alt="Profile">
+            </a>
+        </li>
+        <li *ngIf="!(userLoggined$ | async)">
+            <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+                <img height="50px" width="50px" src="././assets/images/signup.png" alt="Login">
+            </a>
+        </li>
+    </ul>
+</nav>
+
